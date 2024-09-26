@@ -9,12 +9,6 @@ interface ApiService {
     @GET("/v1/geocode")
     fun getLocations(
         @Query("q") query: String,
-        @Query("apiKey") apiKey: String
-    ): Call<APIResModel>
-
-    @GET("/v1/autosuggest")
-    fun getSuggest(
-        @Query("q") query: String,
-        @Query("apiKey") apiKey: String
+        @Query("apiKey") apiKey: String,
     ): Call<APIResModel>
 }
