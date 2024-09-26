@@ -10,6 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.example.mobiletest"
         minSdk = 28
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -32,6 +33,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+
 }
 
 dependencies {
@@ -42,7 +48,14 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.car.ui.lib)
+    implementation(libs.transport.runtime)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Retrofit dependencies
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
+
