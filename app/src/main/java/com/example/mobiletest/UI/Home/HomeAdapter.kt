@@ -18,9 +18,11 @@ import com.example.mobiletest.R
 
 class HomeAdapter(
     private var list: List<ItemModel>,
-    private var searchKeyword:String
-    ) : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>(){
+    private var searchKeyword: String
+) : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+
     private var dataChangeListener: DataChangeListener? = null
+
     lateinit var mListener: onItemClickListener
 
     interface onItemClickListener {
@@ -40,8 +42,8 @@ class HomeAdapter(
     }
 
     inner class HomeViewHolder(view: View, listener: onItemClickListener) : RecyclerView.ViewHolder(view) {
-        val address:TextView
-        val directBtn:ImageView
+        val address: TextView
+        val directBtn: ImageView
 
         init {
             address = view.findViewById(R.id.address_txt)
@@ -57,7 +59,6 @@ class HomeAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.row_address_model, parent, false)
         return HomeViewHolder(view, mListener)
@@ -68,46 +69,48 @@ class HomeAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
         val currItem = list[position]
+
         val addressBuilder = StringBuilder()
         currItem.address.label?.let { addressBuilder.append(" ").append(it) }
-        currItem.address.houseNumber?.let { addressBuilder.append(" ").append(it) }
-        currItem.address.street?.let { addressBuilder.append(" ").append(it) }
-        currItem.address.district?.let { addressBuilder.append(" ").append(it) }
-        currItem.address.city?.let { addressBuilder.append(" ").append(it) }
-        currItem.address.state?.let { addressBuilder.append(" ").append(it) }
-        currItem.address.countryName?.let { addressBuilder.append(" ").append(it) }
+//        currItem.address.houseNumber?.let { addressBuilder.append(" ").append(it) }
+//        currItem.address.street?.let { addressBuilder.append(" ").append(it) }
+//        currItem.address.subdistrict?.let { addressBuilder.append(" ").append(it) }
+//        currItem.address.district?.let { addressBuilder.append(" ").append(it) }
+//        currItem.address.city?.let { addressBuilder.append(" ").append(it) }
+//        currItem.address.state?.let { addressBuilder.append(" ").append(it) }
+//        currItem.address.countryName?.let { addressBuilder.append(" ").append(it) }
 
         val fullAddress = addressBuilder.toString()
 
-        // Highlight the search keyword
         val spannableAddress = SpannableString(fullAddress)
 
         if (searchKeyword.isNotEmpty()) {
             for (char in searchKeyword) {
                 var startIndex = fullAddress.indexOf(char, ignoreCase = true)
 
-                // Continue searching for this character until none are found
+                // Tìm kiếm và làm nổi bật tất cả các ký tự khớp với từ khóa
                 while (startIndex != -1) {
                     spannableAddress.setSpan(
-                        StyleSpan(Typeface.BOLD), // Make the character bold
+                        StyleSpan(Typeface.BOLD),
                         startIndex,
-                        startIndex + 1, // Highlight only the single character
+                        startIndex + 1, // Chỉ làm nổi bật ký tự đơn lẻ
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-                    startIndex = fullAddress.indexOf(char, startIndex + 1, ignoreCase = true) // Search for the next occurrence
+                    startIndex = fullAddress.indexOf(char, startIndex + 1, ignoreCase = true) // Tìm kiếm ký tự tiếp theo
                 }
             }
         }
 
-        // Set the spannable text to the TextView
+        // Đặt chuỗi đã được làm nổi bật vào TextView của ViewHolder
         holder.address.text = spannableAddress
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newList: List<ItemModel>, searchInput:String) {
+    fun updateData(newList: List<ItemModel>, searchInput: String) {
         list = newList
         searchKeyword = searchInput
         notifyDataSetChanged()
         dataChangeListener?.onDataChanged(newList)
     }
+
 }

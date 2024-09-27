@@ -8,51 +8,47 @@
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="5dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/txt_and_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/location_ic"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/baseline_location_on_40"
             android:background="@color/white"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_location_40"
             />
 
         <TextView
             android:id="@+id/address_txt"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:lines="2"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_toStartOf="@id/img_btn"
-            android:layout_toEndOf="@id/location_ic"
+            android:layout_weight="1"
+            android:maxLines="4"
+            android:minLines="2"
             android:textSize="15sp"
             android:textColor="@color/black"
+            android:layout_marginStart="10dp"
             android:text="Address"/>
 
         <ImageView
             android:id="@+id/img_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-
-            android:src="@drawable/baseline_directions_24"
+            android:src="@drawable/ic_directions_40"
             android:background="@color/white"
-            android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
             />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="5dp"
         android:layout_below="@id/txt_and_btn"
         android:background="@color/black"/>
 

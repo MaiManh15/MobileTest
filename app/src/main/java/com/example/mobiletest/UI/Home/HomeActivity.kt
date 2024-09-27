@@ -22,18 +22,32 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class HomeActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
+
     private lateinit var apiService: ApiService
+
     private lateinit var adapter: HomeAdapter
+
+    // Handler được sử dụng để trì hoãn việc gọi API
     private val handler = Handler(Looper.getMainLooper())
+
+    // Runnable để trì hoãn việc tìm kiếm
     private var searchRunnable: Runnable? = null
+
+    // Const
+    private val apiKey = "HisEbNchhPdke-LKMeJToYhcUiP3SlLY-xlKylQdfds"
+    private val lang = "vi"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //adapter
         adapter = HomeAdapter(listOf(), "")
-        binding.recyclerView.layoutManager= LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : HomeAdapter.onItemClickListener {
@@ -42,6 +56,7 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
+        // Khởi tạo Retrofit để gọi API
         val retrofit = Retrofit.Builder()
             .baseUrl("https://geocode.search.hereapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -49,19 +64,24 @@ class HomeActivity : AppCompatActivity() {
 
         apiService = retrofit.create(ApiService::class.java)
 
+        //searchView
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(submitInput: String?): Boolean {
                 // Ẩn bàn phím
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
-                // Bỏ focus
+
                 binding.searchView.clearFocus()
                 adapter.updateData(listOf(), "")
+
                 return true
             }
 
             override fun onQueryTextChange(dataInput: String): Boolean {
+//                Log.d("checkInPut123", dataInput)
+                // Xóa bỏ Runnable hiện tại nếu người dùng tiếp tục nhập từ khóa mới
                 searchRunnable?.let { handler.removeCallbacks(it) }
+
                 if (dataInput.isBlank()) {
                     adapter.updateData(listOf(), "")
                 } else {
@@ -69,15 +89,15 @@ class HomeActivity : AppCompatActivity() {
                     searchRunnable = Runnable {
                         callApi(apiService, dataInput, adapter)
                     }
-                    // Đưa Runnable vào Handler với delay 1 giây
+                    // Đưa Runnable vào Handler với độ trễ 1 giây
                     handler.postDelayed(searchRunnable!!, 1000)
                 }
                 return true
             }
         })
-
     }
 
+    // Hủy bỏ Runnable khi hủy Activity
     override fun onDestroy() {
         super.onDestroy()
         searchRunnable?.let { handler.removeCallbacks(it) }
@@ -91,12 +111,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun callApi(apiService: ApiService, query: String, adapter: HomeAdapter) {
-        val apiKey = "HisEbNchhPdke-LKMeJToYhcUiP3SlLY-xlKylQdfds"
+        val call = apiService.getLocations(query, apiKey, lang)
 
-        val call = apiService.getLocations(query, apiKey)
+        // Gọi API và xử lý phản hồi
         call.enqueue(object : Callback<APIResModel> {
             override fun onResponse(call: Call<APIResModel>, response: Response<APIResModel>) {
                 if (response.isSuccessful) {
+                    // Lấy dữ liệu từ phản hồi của API
                     val hereResponse = response.body()
                     val items = hereResponse?.items
 
@@ -115,5 +136,4 @@ class HomeActivity : AppCompatActivity() {
             }
         })
     }
-
 }

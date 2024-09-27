@@ -1,7 +1,8 @@
 package com.example.mobiletest.Datas.Model
 
 data class AddressModel(
-    val label: String ?= null,
+    val label: String?=null,
+    val subdistrict: String ?= null,
     val countryCode: String?= null,
     val countryName: String?= null,
     val stateCode: String?= null,

@@ -10,5 +10,6 @@ interface ApiService {
     fun getLocations(
         @Query("q") query: String,
         @Query("apiKey") apiKey: String,
+        @Query("lang") lang:String
     ): Call<APIResModel>
 }
