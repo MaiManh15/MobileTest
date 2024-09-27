@@ -8,4 +8,4 @@
 ## Screen Recording
 
 Watch a demo of the project in action:
-[Click here to watch the screen recording]([https://your-screen-recording-link.com](https://github.com/user-attachments/assets/b9f8bd12-3bb9-4415-98e8-160789e98dc4))
+[Click here to watch the screen recording](https://github.com/user-attachments/assets/b9f8bd12-3bb9-4415-98e8-160789e98dc4)
